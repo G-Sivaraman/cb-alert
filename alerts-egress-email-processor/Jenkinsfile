@@ -1,0 +1,33 @@
+node('CBAnalytics') {
+  stage('Checkout') {
+    checkout scm
+    repositoryName = scm.getUserRemoteConfigs()[0].getUrl().tokenize('/').last().split("\\.")[0]
+  }
+  stage('Install dependencies') {
+		sh	'''#!/bin/bash -l
+          nvm install 12.16.3
+          nvm use 12.16.3
+    	    npm install
+				'''
+  }
+  stage('Build') {
+		sh	'''#!/bin/bash -l
+					nvm use 12.16.3
+          rm -rf ./bundle
+          npm run package
+				'''
+  }
+  stage('Publish') {
+     if (env.BRANCH_NAME == 'master') {  
+         withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DHPASSWORD', usernameVariable: 'DHUSERNAME')]) {
+            sh """#!/bin/bash -l
+                    `bash acreds.sh arn:aws:iam::085769750161:role/jenkinsIAM`
+                     cd bundle
+                     zip --exclude '.git/**' -r package.zip .
+                     aws s3 cp package.zip s3://cba-alert-lambdas/egress-email-processor/packages/egress-email-processor-${env.BUILD_DISPLAY_NAME}.zip
+                     rm package.zip
+            """
+         }
+     }
+  }
+}

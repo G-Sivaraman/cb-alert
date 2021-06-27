@@ -1,0 +1,30 @@
+{
+  "name": "replaced-by-user-input",
+  "description": "replaced-by-user-input",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@sendgrid/mail": "^7.2.1",
+    "ts-loader": "^7.0.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.44",
+    "@types/mocha": "^7.0.1",
+    "@types/node": "^13.7.6",
+    "@types/node-fetch": "^2.5.5",
+    "aws-sdk-mock": "^5.0.0",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^6.1.4",
+    "sinon": "^9.0.1"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "package": "webpack --config webpack.config.js",
+    "invoke": "sam local invoke 'SQSPayloadLogger' -e events/event-sqs.json --env-vars env.json",
+    "test": "mocha --recursive dist/src/tests/unit"
+  }
+}
