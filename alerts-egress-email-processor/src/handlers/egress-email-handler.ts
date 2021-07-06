@@ -7,8 +7,8 @@ import { generateMailRequest } from './templete/emailTemplate';
 const AWS = require('aws-sdk');
 
 const sgMail = require('@sendgrid/mail');
-const apiKey = "SG.3UELFTTcSJCJUDNvNMJH1Q.OmHm4JbHt7gJArJb8s_K1na0eIMg2Yzjq7KV_TG1lS";
-//const apiKey = "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"; // Test tomorrow with this new key
+//const apiKey = To-Do Store encrypted in S3
+
 sgMail.setApiKey(apiKey)
 
 const logger = console;
